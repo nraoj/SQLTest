@@ -1,7 +1,7 @@
 USE [AdventureWorks2008]
 GO
 
-
+-- Made changes on 2/5/2019
 SET ANSI_NULLS ON
 GO
 
@@ -23,13 +23,6 @@ BEGIN
 			INNER JOIN [Person].[Person] as p
 			ON p.[BusinessEntityID] = e.[BusinessEntityID]
         WHERE e.[BusinessEntityID] = @BusinessEntityID
-        UNION ALL
-        SELECT e.[BusinessEntityID], e.[OrganizationNode], p.[FirstName], p.[LastName], e.[JobTitle], [RecursionLevel] + 1 -- Join recursive member to anchor
-        FROM [HumanResources].[Employee] e 
-            INNER JOIN [EMP_cte]
-            ON e.[OrganizationNode] = [EMP_cte].[OrganizationNode].GetAncestor(1)
-            INNER JOIN [Person].[Person] p 
-            ON p.[BusinessEntityID] = e.[BusinessEntityID]
     )
     -- Join back to Employee to return the manager name 
     SELECT [EMP_cte].[RecursionLevel], [EMP_cte].[BusinessEntityID], [EMP_cte].[FirstName], [EMP_cte].[LastName], 
